@@ -28,7 +28,7 @@ pub unsafe trait QueryParameter {
     /// conformance to the RFC. Afaik it prevents potentially subverting validation middleware,
     /// order dependent processing, or simple confusion between different components who parse the
     /// query string from different ends.
-    fn unique_value(&self, key: &str) -> Option<Cow<str>>;
+    fn unique_value(&self, key: &str) -> Option<Cow<'_, str>>;
 
     /// Guarantees that one can grab an owned copy.
     fn normalize(&self) -> NormalizedParameter;
@@ -54,7 +54,7 @@ pub struct NormalizedParameter {
 }
 
 unsafe impl QueryParameter for NormalizedParameter {
-    fn unique_value(&self, key: &str) -> Option<Cow<str>> {
+    fn unique_value(&self, key: &str) -> Option<Cow<'_, str>> {
         self.inner
             .get(key)
             .and_then(|val| val.as_ref().map(Cow::as_ref).map(Cow::Borrowed))
@@ -176,7 +176,7 @@ where
     K: Borrow<str> + Eq + Hash,
     V: UniqueValue + Eq + Hash,
 {
-    fn unique_value(&self, key: &str) -> Option<Cow<str>> {
+    fn unique_value(&self, key: &str) -> Option<Cow<'_, str>> {
         self.get(key).and_then(V::get_unique).map(Cow::Borrowed)
     }
 
@@ -202,7 +202,7 @@ where
     K: Borrow<str> + Eq + Hash,
     V: Borrow<str> + Eq + Hash,
 {
-    fn unique_value(&self, key: &str) -> Option<Cow<str>> {
+    fn unique_value(&self, key: &str) -> Option<Cow<'_, str>> {
         let mut value = None;
 
         for entry in self.iter() {
@@ -232,7 +232,7 @@ where
 }
 
 unsafe impl<'a, Q: QueryParameter + 'a + ?Sized> QueryParameter for &'a Q {
-    fn unique_value(&self, key: &str) -> Option<Cow<str>> {
+    fn unique_value(&self, key: &str) -> Option<Cow<'_, str>> {
         (**self).unique_value(key)
     }
 
@@ -242,7 +242,7 @@ unsafe impl<'a, Q: QueryParameter + 'a + ?Sized> QueryParameter for &'a Q {
 }
 
 unsafe impl<'a, Q: QueryParameter + 'a + ?Sized> QueryParameter for &'a mut Q {
-    fn unique_value(&self, key: &str) -> Option<Cow<str>> {
+    fn unique_value(&self, key: &str) -> Option<Cow<'_, str>> {
         (**self).unique_value(key)
     }
 

@@ -22,16 +22,16 @@ pub trait Request {
     fn valid(&self) -> bool;
 
     /// User:password of a basic authorization header.
-    fn authorization(&self) -> Option<(Cow<str>, Cow<[u8]>)>;
+    fn authorization(&self) -> Option<(Cow<'_, str>, Cow<'_, [u8]>)>;
 
     /// Optionally specifies the requested scope
-    fn scope(&self) -> Option<Cow<str>>;
+    fn scope(&self) -> Option<Cow<'_, str>>;
 
     /// Valid requests have this set to "client_credentials"
-    fn grant_type(&self) -> Option<Cow<str>>;
+    fn grant_type(&self) -> Option<Cow<'_, str>>;
 
     /// Retrieve an additional parameter used in an extension
-    fn extension(&self, key: &str) -> Option<Cow<str>>;
+    fn extension(&self, key: &str) -> Option<Cow<'_, str>>;
 
     /// Credentials in body should only be enabled if use of HTTP Basic is not possible.
     ///

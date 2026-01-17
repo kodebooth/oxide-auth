@@ -160,14 +160,14 @@ impl Extensions {
     }
 
     /// Iterate of the public extensions whose presence and content is not secret.
-    pub fn public(&self) -> PublicExtensions {
+    pub fn public(&self) -> PublicExtensions<'_> {
         PublicExtensions {
             iter: self.extensions.iter(),
         }
     }
 
     /// Iterate of the private extensions whose presence and content must not be revealed.
-    pub fn private(&self) -> PrivateExtensions {
+    pub fn private(&self) -> PrivateExtensions<'_> {
         PrivateExtensions(self.extensions.iter())
     }
 }

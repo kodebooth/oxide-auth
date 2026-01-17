@@ -25,19 +25,19 @@ pub trait Request {
     fn valid(&self) -> bool;
 
     /// The refresh token with which to refresh.
-    fn refresh_token(&self) -> Option<Cow<str>>;
+    fn refresh_token(&self) -> Option<Cow<'_, str>>;
 
     /// Optionally specifies the requested scope
-    fn scope(&self) -> Option<Cow<str>>;
+    fn scope(&self) -> Option<Cow<'_, str>>;
 
     /// Valid requests have this set to "refresh_token"
-    fn grant_type(&self) -> Option<Cow<str>>;
+    fn grant_type(&self) -> Option<Cow<'_, str>>;
 
     /// User:password of a basic authorization header.
-    fn authorization(&self) -> Option<(Cow<str>, Cow<[u8]>)>;
+    fn authorization(&self) -> Option<(Cow<'_, str>, Cow<'_, [u8]>)>;
 
     /// Retrieve an additional parameter used in an extension
-    fn extension(&self, key: &str) -> Option<Cow<str>>;
+    fn extension(&self, key: &str) -> Option<Cow<'_, str>>;
 }
 
 /// The specific endpoint trait for refreshing.

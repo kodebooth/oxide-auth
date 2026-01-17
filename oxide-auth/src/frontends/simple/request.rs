@@ -118,15 +118,15 @@ impl WebRequest for Request {
     type Error = NoError;
     type Response = Response;
 
-    fn query(&mut self) -> Result<Cow<dyn QueryParameter + 'static>, Self::Error> {
+    fn query(&mut self) -> Result<Cow<'_, dyn QueryParameter + 'static>, Self::Error> {
         Ok(Cow::Borrowed(&self.query))
     }
 
-    fn urlbody(&mut self) -> Result<Cow<dyn QueryParameter + 'static>, Self::Error> {
+    fn urlbody(&mut self) -> Result<Cow<'_, dyn QueryParameter + 'static>, Self::Error> {
         Ok(Cow::Borrowed(&self.urlbody))
     }
 
-    fn authheader(&mut self) -> Result<Option<Cow<str>>, Self::Error> {
+    fn authheader(&mut self) -> Result<Option<Cow<'_, str>>, Self::Error> {
         Ok(self.auth.as_ref().map(|string| Cow::Borrowed(string.as_str())))
     }
 }
@@ -200,15 +200,15 @@ where
     type Error = T;
     type Response = MapErr<W::Response, F, T>;
 
-    fn query(&mut self) -> Result<Cow<dyn QueryParameter + 'static>, Self::Error> {
+    fn query(&mut self) -> Result<Cow<'_, dyn QueryParameter + 'static>, Self::Error> {
         self.0.query().map_err(&mut self.1)
     }
 
-    fn urlbody(&mut self) -> Result<Cow<dyn QueryParameter + 'static>, Self::Error> {
+    fn urlbody(&mut self) -> Result<Cow<'_, dyn QueryParameter + 'static>, Self::Error> {
         self.0.urlbody().map_err(&mut self.1)
     }
 
-    fn authheader(&mut self) -> Result<Option<Cow<str>>, Self::Error> {
+    fn authheader(&mut self) -> Result<Option<Cow<'_, str>>, Self::Error> {
         self.0.authheader().map_err(&mut self.1)
     }
 }

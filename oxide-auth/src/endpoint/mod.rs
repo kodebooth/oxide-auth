@@ -303,16 +303,16 @@ pub trait WebRequest {
     ///
     /// An Err return value indicates a malformed query or an otherwise malformed WebRequest. Note
     /// that an empty query should result in `Ok(HashMap::new())` instead of an Err.
-    fn query(&mut self) -> Result<Cow<dyn QueryParameter + 'static>, Self::Error>;
+    fn query(&mut self) -> Result<Cow<'_, dyn QueryParameter + 'static>, Self::Error>;
 
     /// Retrieve the parsed `application/x-form-urlencoded` body of the request.
     ///
     /// An Err value / indicates a malformed body or a different Content-Type.
-    fn urlbody(&mut self) -> Result<Cow<dyn QueryParameter + 'static>, Self::Error>;
+    fn urlbody(&mut self) -> Result<Cow<'_, dyn QueryParameter + 'static>, Self::Error>;
 
     /// Contents of the authorization header or none if none exists. An Err value indicates a
     /// malformed header or request.
-    fn authheader(&mut self) -> Result<Option<Cow<str>>, Self::Error>;
+    fn authheader(&mut self) -> Result<Option<Cow<'_, str>>, Self::Error>;
 }
 
 /// Response representation into which the Request is transformed by the code_grant types.
@@ -546,15 +546,15 @@ impl<'a, W: WebRequest> WebRequest for &'a mut W {
     type Error = W::Error;
     type Response = W::Response;
 
-    fn query(&mut self) -> Result<Cow<dyn QueryParameter + 'static>, Self::Error> {
+    fn query(&mut self) -> Result<Cow<'_, dyn QueryParameter + 'static>, Self::Error> {
         (**self).query()
     }
 
-    fn urlbody(&mut self) -> Result<Cow<dyn QueryParameter + 'static>, Self::Error> {
+    fn urlbody(&mut self) -> Result<Cow<'_, dyn QueryParameter + 'static>, Self::Error> {
         (**self).urlbody()
     }
 
-    fn authheader(&mut self) -> Result<Option<Cow<str>>, Self::Error> {
+    fn authheader(&mut self) -> Result<Option<Cow<'_, str>>, Self::Error> {
         (**self).authheader()
     }
 }

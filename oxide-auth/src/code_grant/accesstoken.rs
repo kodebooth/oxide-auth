@@ -62,22 +62,22 @@ pub trait Request {
     fn valid(&self) -> bool;
 
     /// The authorization code grant for which an access token is wanted.
-    fn code(&self) -> Option<Cow<str>>;
+    fn code(&self) -> Option<Cow<'_, str>>;
 
     /// User:password of a basic authorization header.
-    fn authorization(&self) -> Authorization;
+    fn authorization(&self) -> Authorization<'_>;
 
     /// The client_id, optional parameter for public clients.
-    fn client_id(&self) -> Option<Cow<str>>;
+    fn client_id(&self) -> Option<Cow<'_, str>>;
 
     /// Valid request have the redirect url used to request the authorization code grant.
-    fn redirect_uri(&self) -> Option<Cow<str>>;
+    fn redirect_uri(&self) -> Option<Cow<'_, str>>;
 
     /// Valid requests have this set to "authorization_code"
-    fn grant_type(&self) -> Option<Cow<str>>;
+    fn grant_type(&self) -> Option<Cow<'_, str>>;
 
     /// Retrieve an additional parameter used in an extension
-    fn extension(&self, key: &str) -> Option<Cow<str>>;
+    fn extension(&self, key: &str) -> Option<Cow<'_, str>>;
 
     /// Credentials in body should only be enabled if use of HTTP Basic is not possible.
     ///

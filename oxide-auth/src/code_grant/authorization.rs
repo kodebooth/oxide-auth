@@ -20,22 +20,22 @@ pub trait Request {
     fn valid(&self) -> bool;
 
     /// Identity of the client trying to gain an oauth token.
-    fn client_id(&self) -> Option<Cow<str>>;
+    fn client_id(&self) -> Option<Cow<'_, str>>;
 
     /// Optionally specifies the requested scope
-    fn scope(&self) -> Option<Cow<str>>;
+    fn scope(&self) -> Option<Cow<'_, str>>;
 
     /// Valid request have (one of) the registered redirect urls for this client.
-    fn redirect_uri(&self) -> Option<Cow<str>>;
+    fn redirect_uri(&self) -> Option<Cow<'_, str>>;
 
     /// Optional parameter the client can use to identify the redirected user-agent.
-    fn state(&self) -> Option<Cow<str>>;
+    fn state(&self) -> Option<Cow<'_, str>>;
 
     /// The method requested, valid requests MUST return `code`
-    fn response_type(&self) -> Option<Cow<str>>;
+    fn response_type(&self) -> Option<Cow<'_, str>>;
 
     /// Retrieve an additional parameter used in an extension
-    fn extension(&self, key: &str) -> Option<Cow<str>>;
+    fn extension(&self, key: &str) -> Option<Cow<'_, str>>;
 }
 
 /// A system of addons provided additional data.

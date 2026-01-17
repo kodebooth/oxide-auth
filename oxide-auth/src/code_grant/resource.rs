@@ -88,7 +88,7 @@ pub trait Request {
     /// Expects the complete `Authorization` HTTP-header, including the qualification as `Bearer`.
     /// In case the client included multiple forms of authorization, this method MUST return None
     /// and the request SHOULD be marked as invalid.
-    fn token(&self) -> Option<Cow<str>>;
+    fn token(&self) -> Option<Cow<'_, str>>;
 }
 
 /// Required functionality to respond to resource requests.

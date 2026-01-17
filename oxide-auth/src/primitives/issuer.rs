@@ -432,11 +432,11 @@ impl TokenSigner {
         Ok(IssuedToken::without_refresh(token, grant.until))
     }
 
-    fn as_token(&self) -> TaggedAssertion {
+    fn as_token(&self) -> TaggedAssertion<'_> {
         self.signer.tag("token")
     }
 
-    fn as_refresh(&self) -> TaggedAssertion {
+    fn as_refresh(&self) -> TaggedAssertion<'_> {
         self.signer.tag("refresh")
     }
 }
