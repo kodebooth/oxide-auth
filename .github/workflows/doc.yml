@@ -1,0 +1,31 @@
+on:
+  workflow_call:
+    inputs:
+      toolchain:
+        description: "Rust toolchain (i.e. nightly, beta, stable)"
+        required: true
+        type: string
+      crate:
+        description: "Crate name"
+        required: true
+        type: string
+
+jobs:
+  doc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: ${{ inputs.toolchain }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          save-if: ${{ github.ref == 'refs/heads/master' }}
+      - name: Build documentation
+        run: |
+          cargo doc \
+            --all-features \
+            --document-private-items \
+            --no-deps \
+            --package ${{ inputs.crate }} \
+

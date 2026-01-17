@@ -1,0 +1,41 @@
+on:
+  workflow_call:
+    inputs:
+      toolchain:
+        description: "Rust toolchain (i.e. nightly, beta, stable)"
+        required: true
+        type: string
+      crate:
+        description: "Crate name"
+        required: true
+        type: string
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    env:
+      OXIDE_AUTH_SKIP_REDIS: yes
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: ${{ inputs.toolchain }}
+      - run: cargo install cargo-semver-checks --locked
+      - uses: Swatinem/rust-cache@v2
+        with:
+          save-if: ${{ github.ref == 'refs/heads/master' }}
+      - name: Build "${{ inputs.crate }}"
+        run: |
+          cargo build \
+            --all-features \
+            --all-targets \
+            --package ${{ inputs.crate }} \
+            --verbose \
+
+      - name: Run ${{ inputs.crate }} tests
+        run: |
+          cargo test \
+          --all-features \
+          --package ${{ inputs.crate }} \
+          --verbose \
+

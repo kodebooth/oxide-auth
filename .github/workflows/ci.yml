@@ -1,0 +1,261 @@
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+name: ci
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  all-crates:
+    uses: ./.github/workflows/crates.yml
+
+  lib-crates:
+    uses: ./.github/workflows/crates.yml
+    with:
+      kind: lib
+
+  fmt-nightly-matrix:
+    needs: all-crates
+    strategy:
+      fail-fast: false
+      matrix:
+        crate: ${{ fromJson(needs.all-crates.outputs.crates) }}
+    uses: ./.github/workflows/fmt.yml
+    with:
+      toolchain: nightly
+      crate: ${{ matrix.crate }}
+
+  fmt-beta-matrix:
+    needs: all-crates
+    strategy:
+      fail-fast: false
+      matrix:
+        crate: ${{ fromJson(needs.all-crates.outputs.crates) }}
+    uses: ./.github/workflows/fmt.yml
+    with:
+      toolchain: beta
+      crate: ${{ matrix.crate }}
+
+  fmt-stable-matrix:
+    needs: all-crates
+    strategy:
+      fail-fast: false
+      matrix:
+        crate: ${{ fromJson(needs.all-crates.outputs.crates) }}
+    uses: ./.github/workflows/fmt.yml
+    with:
+      toolchain: stable
+      crate: ${{ matrix.crate }}
+
+  fmt-nightly:
+    runs-on: ubuntu-latest
+    needs: fmt-nightly-matrix
+    steps:
+      - run: true
+
+  fmt-beta:
+    runs-on: ubuntu-latest
+    needs: fmt-beta-matrix
+    steps:
+      - run: true
+
+  fmt-stable:
+    runs-on: ubuntu-latest
+    needs: fmt-stable-matrix
+    steps:
+      - run: true
+
+  lint-nightly-matrix:
+    needs: all-crates
+    strategy:
+      fail-fast: false
+      matrix:
+        crate: ${{ fromJson(needs.all-crates.outputs.crates) }}
+    uses: ./.github/workflows/lint.yml
+    with:
+      toolchain: nightly
+      crate: ${{ matrix.crate }}
+
+  lint-beta-matrix:
+    needs: all-crates
+    strategy:
+      fail-fast: false
+      matrix:
+        crate: ${{ fromJson(needs.all-crates.outputs.crates) }}
+    uses: ./.github/workflows/lint.yml
+    with:
+      toolchain: beta
+      crate: ${{ matrix.crate }}
+
+  lint-stable-matrix:
+    needs: all-crates
+    strategy:
+      fail-fast: false
+      matrix:
+        crate: ${{ fromJson(needs.all-crates.outputs.crates) }}
+    uses: ./.github/workflows/lint.yml
+    with:
+      toolchain: stable
+      crate: ${{ matrix.crate }}
+
+  lint-nightly:
+    runs-on: ubuntu-latest
+    needs: lint-nightly-matrix
+    steps:
+      - run: true
+
+  lint-beta:
+    runs-on: ubuntu-latest
+    needs: lint-beta-matrix
+    steps:
+      - run: true
+
+  lint-stable:
+    runs-on: ubuntu-latest
+    needs: lint-stable-matrix
+    steps:
+      - run: true
+
+  doc-nightly-matrix:
+    needs: all-crates
+    strategy:
+      fail-fast: false
+      matrix:
+        crate: ${{ fromJson(needs.all-crates.outputs.crates) }}
+    uses: ./.github/workflows/doc.yml
+    with:
+      toolchain: nightly
+      crate: ${{ matrix.crate }}
+
+  doc-beta-matrix:
+    needs: all-crates
+    strategy:
+      fail-fast: false
+      matrix:
+        crate: ${{ fromJson(needs.all-crates.outputs.crates) }}
+    uses: ./.github/workflows/doc.yml
+    with:
+      toolchain: beta
+      crate: ${{ matrix.crate }}
+
+  doc-stable-matrix:
+    needs: all-crates
+    strategy:
+      fail-fast: false
+      matrix:
+        crate: ${{ fromJson(needs.all-crates.outputs.crates) }}
+    uses: ./.github/workflows/doc.yml
+    with:
+      toolchain: stable
+      crate: ${{ matrix.crate }}
+
+  doc-nightly:
+    runs-on: ubuntu-latest
+    needs: doc-nightly-matrix
+    steps:
+      - run: true
+
+  doc-beta:
+    runs-on: ubuntu-latest
+    needs: doc-beta-matrix
+    steps:
+      - run: true
+
+  doc-stable:
+    runs-on: ubuntu-latest
+    needs: doc-stable-matrix
+    steps:
+      - run: true
+
+  semver-beta-matrix:
+    needs: lib-crates
+    strategy:
+      fail-fast: false
+      matrix:
+        crate: ${{ fromJson(needs.lib-crates.outputs.crates) }}
+    uses: ./.github/workflows/semver.yml
+    with:
+      toolchain: beta
+      crate: ${{ matrix.crate }}
+
+  semver-stable-matrix:
+    needs: lib-crates
+    strategy:
+      fail-fast: false
+      matrix:
+        crate: ${{ fromJson(needs.lib-crates.outputs.crates) }}
+    uses: ./.github/workflows/semver.yml
+    with:
+      toolchain: stable
+      crate: ${{ matrix.crate }}
+
+  semver-beta:
+    runs-on: ubuntu-latest
+    needs: semver-beta-matrix
+    steps:
+      - run: true
+
+  semver-stable:
+    runs-on: ubuntu-latest
+    needs: semver-stable-matrix
+    steps:
+      - run: true
+
+  build-and-test-nightly-matrix:
+    needs: all-crates
+    strategy:
+      fail-fast: false
+      matrix:
+        crate: ${{ fromJson(needs.all-crates.outputs.crates) }}
+    uses: ./.github/workflows/build.yml
+    with:
+      toolchain: nightly
+      crate: ${{ matrix.crate }}
+
+  build-and-test-beta-matrix:
+    needs: all-crates
+    strategy:
+      fail-fast: false
+      matrix:
+        crate: ${{ fromJson(needs.all-crates.outputs.crates) }}
+    uses: ./.github/workflows/build.yml
+    with:
+      toolchain: beta
+      crate: ${{ matrix.crate }}
+
+  build-and-test-stable-matrix:
+    needs: all-crates
+    strategy:
+      fail-fast: false
+      matrix:
+        crate: ${{ fromJson(needs.all-crates.outputs.crates) }}
+    uses: ./.github/workflows/build.yml
+    with:
+      toolchain: stable
+      crate: ${{ matrix.crate }}
+
+  build-and-test-nightly:
+    runs-on: ubuntu-latest
+    needs: build-and-test-nightly-matrix
+    steps:
+      - run: true
+
+  build-and-test-beta:
+    runs-on: ubuntu-latest
+    needs: build-and-test-beta-matrix
+    steps:
+      - run: true
+
+  build-and-test-stable:
+    runs-on: ubuntu-latest
+    needs: build-and-test-stable-matrix
+    steps:
+      - run: true
+
