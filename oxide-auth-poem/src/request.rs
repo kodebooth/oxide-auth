@@ -43,21 +43,21 @@ impl WebRequest for OAuthRequest {
     type Error = OxidePoemError;
     type Response = OAuthResponse;
 
-    fn query(&mut self) -> Result<Cow<dyn QueryParameter + 'static>, Self::Error> {
+    fn query(&mut self) -> Result<Cow<'_, dyn QueryParameter + 'static>, Self::Error> {
         self.query
             .as_ref()
             .map(|q| Cow::Borrowed(q as &dyn QueryParameter))
             .ok_or(OxidePoemError::Request)
     }
 
-    fn urlbody(&mut self) -> Result<Cow<dyn QueryParameter + 'static>, Self::Error> {
+    fn urlbody(&mut self) -> Result<Cow<'_, dyn QueryParameter + 'static>, Self::Error> {
         self.body
             .as_ref()
             .map(|b| Cow::Borrowed(b as &dyn QueryParameter))
             .ok_or(OxidePoemError::Request)
     }
 
-    fn authheader(&mut self) -> Result<Option<Cow<str>>, Self::Error> {
+    fn authheader(&mut self) -> Result<Option<Cow<'_, str>>, Self::Error> {
         Ok(self.auth.as_deref().map(Cow::Borrowed))
     }
 }
