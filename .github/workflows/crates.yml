@@ -1,0 +1,17 @@
+on:
+  workflow_call:
+    outputs:
+      crates:
+        description: "List of crates in the workspace"
+        value: ${{ jobs.crates.outputs.crates }}
+
+jobs:
+  crates:
+    runs-on: ubuntu-latest
+    outputs:
+      crates: ${{ steps.crates.outputs.crates }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@stable
+      - id: crates
+        run: echo crates=$(cargo metadata --no-deps --format-version 1 | jq --raw-output '.packages[].name' | jq --raw-input --slurp 'split("\n") | map(select(length > 0))') >> $GITHUB_OUTPUT
