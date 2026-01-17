@@ -18,6 +18,8 @@ use serde::Deserializer;
 /// * `HashMap<String, Vec<String>>`
 /// * `HashMap<Cow<'static, str>, Cow<'static, str>>`
 ///
+/// # Safety
+///
 /// You should generally not have to implement this trait yourself, and if you do there are
 /// additional requirements on your implementation to guarantee standard conformance. Therefore the
 /// trait is marked as `unsafe`.
@@ -166,6 +168,12 @@ impl ToOwned for dyn QueryParameter + Send {
 ///
 /// If this were done with slices, that would require choosing a particular
 /// value type of the underlying slice e.g. `[String]`.
+///
+/// # Safety
+///
+/// You should generally not have to implement this trait yourself, and if you do there are
+/// additional requirements on your implementation to guarantee standard conformance. Therefore the
+/// trait is marked as `unsafe`.
 pub unsafe trait UniqueValue {
     /// Borrow the unique value reference.
     fn get_unique(&self) -> Option<&str>;
