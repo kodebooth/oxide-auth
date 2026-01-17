@@ -64,7 +64,7 @@ impl StringfiedEncodedClient {
         };
 
         Ok(EncodedClient {
-            client_id: (&self.client_id).parse().unwrap(),
+            client_id: (self.client_id).parse().unwrap(),
             redirect_uri,
             additional_redirect_uris,
             default_scope: Scope::from_str(
