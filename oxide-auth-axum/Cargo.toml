@@ -17,3 +17,15 @@ axum = { version = "0.8", default-features = false, features = [
     "query",
 ] }
 oxide-auth = { version = "0.6", path = "../oxide-auth" }
+
+[dev-dependencies]
+tokio = { version = "1.49", features = ["macros", "rt-multi-thread"] }
+axum = { version = "0.8" }
+oauth2 = { version = "5.0" }
+reqwest = { version = "0.11", features = ["json"] }
+serde_urlencoded = { version = "0.7" }
+bon = "3"
+serde = { version = "1.0", features = ["derive"] }
+tracing = "0.1"
+open = "5.3"
+tracing-subscriber = "0.3"
