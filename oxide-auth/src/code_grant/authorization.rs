@@ -569,7 +569,7 @@ impl From<ErrorUrl> for Url {
     /// Finalize the error url by saving its parameters in the query part of the redirect_uri
     fn from(val: ErrorUrl) -> Self {
         let mut url = val.base_uri;
-        url.query_pairs_mut().extend_pairs(val.error.into_iter());
+        url.query_pairs_mut().extend_pairs(val.error);
         url
     }
 }
