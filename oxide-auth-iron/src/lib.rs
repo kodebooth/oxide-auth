@@ -65,7 +65,7 @@ impl<'a, 'b, 'c: 'b> OAuthRequest<'a, 'b, 'c> {
     }
 
     /// Fetch authorization header
-    pub fn authorization_header(&self) -> Option<Cow<str>> {
+    pub fn authorization_header(&self) -> Option<Cow<'_, str>> {
         // Get the raw header.
         self.0
             .headers
@@ -109,18 +109,24 @@ impl OAuthResponse {
     }
 }
 
+impl Default for OAuthResponse {
+    fn default() -> Self {
+        OAuthResponse::new()
+    }
+}
+
 /// Requests are handed as mutable reference to the underlying object.
 impl<'a, 'b, 'c: 'b> WebRequest for OAuthRequest<'a, 'b, 'c> {
     type Response = OAuthResponse;
     type Error = Error;
 
-    fn query(&mut self) -> Result<Cow<dyn QueryParameter + 'static>, Self::Error> {
+    fn query(&mut self) -> Result<Cow<'_, dyn QueryParameter + 'static>, Self::Error> {
         serde_urlencoded::from_str(self.query_string())
             .map_err(|_| Error::BadRequest)
             .map(Cow::Owned)
     }
 
-    fn urlbody(&mut self) -> Result<Cow<dyn QueryParameter + 'static>, Self::Error> {
+    fn urlbody(&mut self) -> Result<Cow<'_, dyn QueryParameter + 'static>, Self::Error> {
         let formatted = self.is_form_url_encoded();
         if !formatted {
             return Err(Error::BadRequest);
@@ -131,7 +137,7 @@ impl<'a, 'b, 'c: 'b> WebRequest for OAuthRequest<'a, 'b, 'c> {
             .map(Cow::Owned)
     }
 
-    fn authheader(&mut self) -> Result<Option<Cow<str>>, Self::Error> {
+    fn authheader(&mut self) -> Result<Option<Cow<'_, str>>, Self::Error> {
         Ok(self.authorization_header())
     }
 }
