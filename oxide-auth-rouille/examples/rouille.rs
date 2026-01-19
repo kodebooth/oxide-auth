@@ -135,7 +135,7 @@ here</a> to begin the authorization process.
 /// the flow.
 fn solicitor(request: &mut Request, grant: Solicitation<'_>) -> OwnerConsent<OAuthResponse> {
     if request.method() == "GET" {
-        let text = support::consent_page_html("/authorize".into(), grant);
+        let text = support::consent_page_html("/authorize", grant);
         let response = Response::html(text);
         OwnerConsent::InProgress(response.into())
     } else if request.method() == "POST" {
