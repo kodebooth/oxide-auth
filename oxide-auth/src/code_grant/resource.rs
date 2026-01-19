@@ -215,6 +215,12 @@ impl Resource {
     }
 }
 
+impl Default for Resource {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 /// Do needed verification before granting access to the resource
 pub fn protect(handler: &mut dyn Endpoint, req: &dyn Request) -> Result<Grant> {
     enum Requested {
