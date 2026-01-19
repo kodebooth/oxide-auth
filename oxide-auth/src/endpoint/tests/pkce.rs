@@ -38,9 +38,9 @@ impl PkceSetup {
         let issuer = TokenMap::new(RandomGenerator::new(16));
 
         PkceSetup {
-            registrar: registrar,
-            authorizer: authorizer,
-            issuer: issuer,
+            registrar,
+            authorizer,
+            issuer,
             auth_token: token,
             // The following are from https://tools.ietf.org/html/rfc7636#page-18
             sha256_challenge: "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM".to_string(),
