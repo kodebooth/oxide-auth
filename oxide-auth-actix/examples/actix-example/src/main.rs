@@ -24,15 +24,17 @@ here</a> to begin the authorization process.
 </html>
 ";
 
+type ExampleEndpoint = Generic<
+    ClientMap,
+    AuthMap<RandomGenerator>,
+    TokenMap<RandomGenerator>,
+    Vacant,
+    Vec<Scope>,
+    fn() -> OAuthResponse,
+>;
+
 struct State {
-    endpoint: Generic<
-        ClientMap,
-        AuthMap<RandomGenerator>,
-        TokenMap<RandomGenerator>,
-        Vacant,
-        Vec<Scope>,
-        fn() -> OAuthResponse,
-    >,
+    endpoint: ExampleEndpoint,
 }
 
 enum Extras {
