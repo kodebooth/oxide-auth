@@ -170,7 +170,7 @@ impl OwnerSolicitor<CraftedRequest> for Deny {
     }
 }
 
-impl<'l> OwnerSolicitor<CraftedRequest> for &'l Allow {
+impl OwnerSolicitor<CraftedRequest> for &Allow {
     fn check_consent(
         &mut self, _: &mut CraftedRequest, _: Solicitation,
     ) -> OwnerConsent<CraftedResponse> {
@@ -178,7 +178,7 @@ impl<'l> OwnerSolicitor<CraftedRequest> for &'l Allow {
     }
 }
 
-impl<'l> OwnerSolicitor<CraftedRequest> for &'l Deny {
+impl OwnerSolicitor<CraftedRequest> for &Deny {
     fn check_consent(
         &mut self, _: &mut CraftedRequest, _: Solicitation,
     ) -> OwnerConsent<CraftedResponse> {
