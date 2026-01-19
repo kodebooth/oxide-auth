@@ -208,7 +208,7 @@ where
                         OAuthResponse::ok()
                             .content_type("text/html")
                             .unwrap()
-                            .body(&crate::support::consent_page_html("/authorize".into(), pre_grant)),
+                            .body(&crate::support::consent_page_html("/authorize", pre_grant)),
                     )
                 });
 
