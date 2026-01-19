@@ -539,7 +539,7 @@ fn reborrow<'a, T>(opt: &'a mut Option<&mut T>) -> Option<&'a mut T> {
     }
 }
 
-impl<'a, W: WebRequest> WebRequest for &'a mut W {
+impl<W: WebRequest> WebRequest for &mut W {
     type Error = W::Error;
     type Response = W::Response;
 
@@ -556,7 +556,7 @@ impl<'a, W: WebRequest> WebRequest for &'a mut W {
     }
 }
 
-impl<'a, R: WebRequest, E: Endpoint<R>> Endpoint<R> for &'a mut E {
+impl<R: WebRequest, E: Endpoint<R>> Endpoint<R> for &mut E {
     type Error = E::Error;
 
     fn registrar(&self) -> Option<&dyn Registrar> {
@@ -666,7 +666,7 @@ impl<W: WebRequest> Scopes<W> for Vec<Scope> {
     }
 }
 
-impl<'a, W: WebRequest> Scopes<W> for &'a [Scope] {
+impl<W: WebRequest> Scopes<W> for &[Scope] {
     fn scopes(&mut self, _: &mut W) -> &[Scope] {
         self
     }

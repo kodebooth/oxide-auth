@@ -441,7 +441,7 @@ impl TokenSigner {
     }
 }
 
-impl<'s, I: Issuer + ?Sized> Issuer for &'s mut I {
+impl<I: Issuer + ?Sized> Issuer for &mut I {
     fn issue(&mut self, grant: Grant) -> Result<IssuedToken, ()> {
         (**self).issue(grant)
     }
@@ -531,7 +531,7 @@ impl Issuer for TokenSigner {
     }
 }
 
-impl<'a> Issuer for &'a TokenSigner {
+impl Issuer for &TokenSigner {
     fn issue(&mut self, mut grant: Grant) -> Result<IssuedToken, ()> {
         if let Some(duration) = &self.duration {
             grant.until = Utc::now() + *duration;

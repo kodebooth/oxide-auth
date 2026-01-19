@@ -651,7 +651,7 @@ impl ClientMap {
     }
 
     // This is not an instance method because it needs to borrow the box but register needs &mut
-    fn current_policy<'a>(policy: &'a Option<Box<dyn PasswordPolicy>>) -> &'a dyn PasswordPolicy {
+    fn current_policy(policy: &Option<Box<dyn PasswordPolicy>>) -> &dyn PasswordPolicy {
         policy
             .as_ref()
             .map(|boxed| &**boxed)
@@ -679,7 +679,7 @@ impl FromIterator<Client> for ClientMap {
     }
 }
 
-impl<'s, R: Registrar + ?Sized> Registrar for &'s R {
+impl<R: Registrar + ?Sized> Registrar for &R {
     fn bound_redirect<'a>(&self, bound: ClientUrl<'a>) -> Result<BoundClient<'a>, RegistrarError> {
         (**self).bound_redirect(bound)
     }
@@ -693,7 +693,7 @@ impl<'s, R: Registrar + ?Sized> Registrar for &'s R {
     }
 }
 
-impl<'s, R: Registrar + ?Sized> Registrar for &'s mut R {
+impl<R: Registrar + ?Sized> Registrar for &mut R {
     fn bound_redirect<'a>(&self, bound: ClientUrl<'a>) -> Result<BoundClient<'a>, RegistrarError> {
         (**self).bound_redirect(bound)
     }

@@ -263,7 +263,7 @@ unsafe impl UniqueValue for String {
     }
 }
 
-unsafe impl<'a, V> UniqueValue for &'a V
+unsafe impl<V> UniqueValue for &V
 where
     V: AsRef<str> + ?Sized,
 {
