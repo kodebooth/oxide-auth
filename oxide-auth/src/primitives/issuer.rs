@@ -254,11 +254,11 @@ impl<G: TagGrant> Issuer for TokenMap<G> {
             let access = self.generator.tag(self.usage, &grant)?;
             let refresh = self.generator.tag(self.usage.wrapping_add(1), &grant)?;
             debug_assert!(
-                access.len() > 0,
+                !access.is_empty(),
                 "An empty access token was generated, this is horribly insecure."
             );
             debug_assert!(
-                refresh.len() > 0,
+                !refresh.is_empty(),
                 "An empty refresh token was generated, this is horribly insecure."
             );
             (access, refresh)
