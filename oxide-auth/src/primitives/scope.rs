@@ -73,8 +73,8 @@ impl Scope {
     fn invalid_scope_char(ch: char) -> bool {
         match ch {
             '\x21' => false,
-            ch if ch >= '\x23' && ch <= '\x5b' => false,
-            ch if ch >= '\x5d' && ch <= '\x7e' => false,
+            '\x23'..='\x5b' => false,
+            '\x5d'..='\x7e' => false,
             ' ' => false, // Space seperator is a valid char
             _ => true,
         }
