@@ -217,7 +217,7 @@ impl<'a, T: GrantExtension + ?Sized> GrantExtension for &'a T {
     }
 }
 
-impl<'a, T: GrantExtension + ?Sized> GrantExtension for Cow<'a, T>
+impl<'a, T: GrantExtension> GrantExtension for Cow<'a, T>
 where
     T: Clone + ToOwned,
 {

@@ -68,7 +68,7 @@ impl<'a, T: AuthorizationAddon + ?Sized> AuthorizationAddon for &'a T {
     }
 }
 
-impl<'a, T: AuthorizationAddon + ?Sized> AuthorizationAddon for Cow<'a, T>
+impl<'a, T: AuthorizationAddon> AuthorizationAddon for Cow<'a, T>
 where
     T: Clone + ToOwned,
 {
@@ -101,7 +101,7 @@ impl<'a, T: AccessTokenAddon + ?Sized> AccessTokenAddon for &'a T {
     }
 }
 
-impl<'a, T: AccessTokenAddon + ?Sized> AccessTokenAddon for Cow<'a, T>
+impl<'a, T: AccessTokenAddon> AccessTokenAddon for Cow<'a, T>
 where
     T: Clone + ToOwned,
 {
@@ -134,7 +134,7 @@ impl<'a, T: ClientCredentialsAddon + ?Sized> ClientCredentialsAddon for &'a T {
     }
 }
 
-impl<'a, T: ClientCredentialsAddon + ?Sized> ClientCredentialsAddon for Cow<'a, T>
+impl<'a, T: ClientCredentialsAddon> ClientCredentialsAddon for Cow<'a, T>
 where
     T: Clone + ToOwned,
 {
