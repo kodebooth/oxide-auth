@@ -220,7 +220,7 @@ where
     fn normalize(&self) -> NormalizedParameter {
         let mut params = NormalizedParameter::default();
         self.iter()
-            .map(|&(ref key, ref val)| {
+            .map(|(key, val)| {
                 (
                     Cow::Owned(key.borrow().to_string()),
                     Cow::Owned(val.borrow().to_string()),
