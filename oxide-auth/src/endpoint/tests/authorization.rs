@@ -78,12 +78,7 @@ impl AuthorizationSetup {
         };
 
         match response.location {
-            Some(ref url)
-                if url
-                    .query_pairs()
-                    .collect::<HashMap<_, _>>()
-                    .get("error")
-                    .is_some() => {}
+            Some(ref url) if url.query_pairs().collect::<HashMap<_, _>>().contains_key("error") => {}
             other => panic!("Expected location with error set description: {:?}", other),
         }
     }

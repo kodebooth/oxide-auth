@@ -133,7 +133,7 @@ impl AccessTokenSetup {
         match &response.body {
             Some(Body::Json(ref json)) => {
                 let content: HashMap<String, String> = serde_json::from_str(json).unwrap();
-                assert!(content.get("error").is_some(), "Error not set in json response");
+                assert!(content.contains_key("error"), "Error not set in json response");
             }
             other => panic!("Expected json encoded body, got {:?}", other),
         }
