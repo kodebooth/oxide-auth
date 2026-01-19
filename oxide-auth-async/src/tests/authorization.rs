@@ -119,9 +119,9 @@ impl AuthorizationSetup {
         }
     }
 
-    fn test_error_redirect<P: Send + Sync>(&mut self, request: CraftedRequest, mut pagehandler: P)
+    fn test_error_redirect<P>(&mut self, request: CraftedRequest, mut pagehandler: P)
     where
-        P: OwnerSolicitor<CraftedRequest>,
+        P: OwnerSolicitor<CraftedRequest> + Send + Sync,
     {
         let mut authorization_flow = AuthorizationFlow::prepare(AuthorizationEndpoint::new(
             &self.registrar,
