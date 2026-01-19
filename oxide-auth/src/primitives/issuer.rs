@@ -523,11 +523,11 @@ impl Issuer for TokenSigner {
     }
 
     fn recover_token<'a>(&'a self, token: &'a str) -> Result<Option<Grant>, ()> {
-        (&&*self).recover_token(token)
+        (&self).recover_token(token)
     }
 
     fn recover_refresh<'a>(&'a self, token: &'a str) -> Result<Option<Grant>, ()> {
-        (&&*self).recover_refresh(token)
+        (&self).recover_refresh(token)
     }
 }
 
