@@ -209,10 +209,7 @@ impl<'flow> Solicitation<'flow> {
     /// This will need to be provided to the response back to the client so it must be preserved
     /// across a redirect or a consent screen presented by the user agent.
     pub fn state(&self) -> Option<&str> {
-        match self.state {
-            None => None,
-            Some(ref state) => Some(state),
-        }
+        self.state.as_ref().map(|x| x as _)
     }
 
     /// Create a new solicitation request from a pre grant.
