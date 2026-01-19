@@ -211,7 +211,7 @@ impl<'a> Iterator for PrivateExtensions<'a> {
     }
 }
 
-impl<'a, T: GrantExtension + ?Sized> GrantExtension for &'a T {
+impl<T: GrantExtension + ?Sized> GrantExtension for &T {
     fn identifier(&self) -> &'static str {
         (**self).identifier()
     }

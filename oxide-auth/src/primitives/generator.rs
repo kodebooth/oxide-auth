@@ -163,7 +163,7 @@ impl Assertion {
         TaggedAssertion(self, tag)
     }
 
-    fn extract<'a>(&self, token: &'a str) -> Result<(Grant, String), ()> {
+    fn extract(&self, token: &str) -> Result<(Grant, String), ()> {
         let decoded = STANDARD.decode(token).map_err(|_| ())?;
         let assertion: AssertGrant = rmp_serde::from_slice(&decoded).map_err(|_| ())?;
 
@@ -216,7 +216,7 @@ impl<'a> TaggedAssertion<'a> {
     ///
     /// Result in an Err if either the signature is invalid or if the tag does not match the
     /// expected usage tag given to this assertion.
-    pub fn extract<'b>(&self, token: &'b str) -> Result<Grant, ()> {
+    pub fn extract(&self, token: &str) -> Result<Grant, ()> {
         self.0
             .extract(token)
             .and_then(|(token, tag)| if tag == self.1 { Ok(token) } else { Err(()) })
@@ -241,7 +241,7 @@ impl TagGrant for RandomGenerator {
     }
 }
 
-impl<'a> TagGrant for &'a RandomGenerator {
+impl TagGrant for &RandomGenerator {
     fn tag(&mut self, _: u64, _: &Grant) -> Result<String, ()> {
         Ok(self.generate())
     }
@@ -265,7 +265,7 @@ impl TagGrant for Assertion {
     }
 }
 
-impl<'a> TagGrant for &'a Assertion {
+impl TagGrant for &Assertion {
     fn tag(&mut self, counter: u64, grant: &Grant) -> Result<String, ()> {
         self.counted_signature(counter, grant)
     }
