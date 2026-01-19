@@ -171,10 +171,10 @@ enum Credentials<'a> {
 ///
 /// 1. Ensure the request is valid based on the basic requirements (includes required parameters)
 /// 2. Try to produce a new token
-///     2.1. Authenticate the client
-///     2.2. If there was no authentication, assert token does not require authentication
-///     2.3. Recover the current grant corresponding to the `code`
-///     2.4. Check the intrinsic validity (scope)
+///    2.1. Authenticate the client
+///    2.2. If there was no authentication, assert token does not require authentication
+///    2.3. Recover the current grant corresponding to the `code`
+///    2.4. Check the intrinsic validity (scope)
 /// 3. Query the backend for a new (bearer) token
 pub struct AccessToken {
     state: AccessTokenState,

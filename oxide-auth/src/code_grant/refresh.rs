@@ -82,9 +82,9 @@ pub struct BearerToken(RefreshedToken, String);
 /// 1. Ensure the request is valid based on the basic requirements (includes required parameters)
 /// 2. Check any included authentication
 /// 3. Try to recover the refresh token
-///     3.1. Check that it belongs to the authenticated client
-///     3.2. If there was no authentication, assert token does not require authentication
-///     3.3. Check the intrinsic validity (timestamp, scope)
+///    3.1. Check that it belongs to the authenticated client
+///    3.2. If there was no authentication, assert token does not require authentication
+///    3.3. Check the intrinsic validity (timestamp, scope)
 /// 4. Query the backend for a renewed (bearer) token
 #[derive(Debug)]
 pub struct Refresh {
@@ -324,9 +324,9 @@ impl<'req> Input<'req> {
 /// 1. Ensure the request is valid based on the basic requirements (includes required parameters)
 /// 2. Check any included authentication
 /// 3. Try to recover the refresh token
-///     3.1. Check that it belongs to the authenticated client
-///     3.2. If there was no authentication, assert token does not require authentication
-///     3.3. Check the intrinsic validity (timestamp, scope)
+///    3.1. Check that it belongs to the authenticated client
+///    3.2. If there was no authentication, assert token does not require authentication
+///    3.3. Check the intrinsic validity (timestamp, scope)
 /// 4. Query the backend for a renewed (bearer) token
 pub fn refresh(handler: &mut dyn Endpoint, request: &dyn Request) -> Result<BearerToken> {
     enum Requested {
