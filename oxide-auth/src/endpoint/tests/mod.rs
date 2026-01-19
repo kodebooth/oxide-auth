@@ -41,9 +41,10 @@ struct CraftedResponse {
 }
 
 /// An enum containing the necessary HTTP status codes.
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, Default)]
 enum Status {
     /// Http status code 200.
+    #[default]
     Ok,
 
     /// Http status code 302.
@@ -199,12 +200,6 @@ where
     fn to_single_value_query(self) -> HashMap<String, Vec<String>> {
         self.map(|&(ref k, ref v)| (k.as_ref().to_string(), vec![v.as_ref().to_string()]))
             .collect()
-    }
-}
-
-impl Default for Status {
-    fn default() -> Self {
-        Status::Ok
     }
 }
 
