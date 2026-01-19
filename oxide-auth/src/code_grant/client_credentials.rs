@@ -130,9 +130,9 @@ enum Credentials<'a> {
 ///
 /// 1. Ensure the request is valid based on the basic requirements (includes required parameters)
 /// 2. Try to produce a new token
-///     2.1. Authenticate the client
-///     2.2. Construct a grant based on the request
-///     2.3. Check the intrinsic validity (scope)
+///    2.1. Authenticate the client
+///    2.2. Construct a grant based on the request
+///    2.3. Check the intrinsic validity (scope)
 /// 3. Query the backend for a new (bearer) token
 pub struct ClientCredentials {
     state: ClientCredentialsState,
