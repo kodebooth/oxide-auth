@@ -198,7 +198,7 @@ impl Client {
             .map_err(|_| Error::RefreshFailed)?;
         let mut token_map: TokenMap = parse_token_response(token_response)?;
 
-        if token_map.error.is_some() || !token_map.access_token.is_some() {
+        if token_map.error.is_some() || token_map.access_token.is_none() {
             return Err(Error::MissingToken);
         }
 
