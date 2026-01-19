@@ -306,7 +306,7 @@ mod url_serde {
     use serde::de::{Deserialize, Deserializer, Error};
 
     pub fn serialize<S: Serializer>(url: &Url, serializer: S) -> Result<S::Ok, S::Error> {
-        serializer.serialize_str(&url.to_string())
+        serializer.serialize_str(url.as_ref())
     }
 
     pub fn deserialize<'de, D: Deserializer<'de>>(deserializer: D) -> Result<Url, D::Error> {
