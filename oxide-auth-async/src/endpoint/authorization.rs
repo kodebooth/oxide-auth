@@ -69,6 +69,7 @@ where
 }
 
 /// Result type from processing an authentication request.
+#[allow(clippy::large_enum_variant)]
 enum AuthorizationPartialInner<'a, E: 'a, R: 'a>
 where
     E: Endpoint<R> + Send,
