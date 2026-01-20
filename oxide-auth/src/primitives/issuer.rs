@@ -22,15 +22,19 @@ use super::generator::{TagGrant, TaggedAssertion, Assertion};
 /// they do not intend to offer a statefull refresh api).
 pub trait Issuer {
     /// Create a token authorizing the request parameters
+    #[allow(clippy::result_unit_err)]
     fn issue(&mut self, grant: Grant) -> Result<IssuedToken, ()>;
 
     /// Refresh a token.
+    #[allow(clippy::result_unit_err)]
     fn refresh(&mut self, _refresh: &str, _grant: Grant) -> Result<RefreshedToken, ()>;
 
     /// Get the values corresponding to a bearer token
+    #[allow(clippy::result_unit_err)]
     fn recover_token<'a>(&'a self, _: &'a str) -> Result<Option<Grant>, ()>;
 
     /// Get the values corresponding to a refresh token
+    #[allow(clippy::result_unit_err)]
     fn recover_refresh<'a>(&'a self, _: &'a str) -> Result<Option<Grant>, ()>;
 }
 

@@ -99,6 +99,7 @@ pub trait Extension {
     ///
     /// The input data comes from the extension data produced in the handling of the
     /// authorization code request.
+    #[allow(clippy::result_unit_err)]
     fn extend(&mut self, request: &dyn Request, data: Extensions)
         -> std::result::Result<Extensions, ()>;
 }

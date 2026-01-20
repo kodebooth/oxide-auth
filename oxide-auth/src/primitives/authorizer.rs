@@ -16,11 +16,13 @@ use super::generator::TagGrant;
 /// The authorization code can be traded for a bearer token at the token endpoint.
 pub trait Authorizer {
     /// Create a code which allows retrieval of a bearer token at a later time.
+    #[allow(clippy::result_unit_err)]
     fn authorize(&mut self, _: Grant) -> Result<String, ()>;
 
     /// Retrieve the parameters associated with a token, invalidating the code in the process. In
     /// particular, a code should not be usable twice (there is no stateless implementation of an
     /// authorizer for this reason).
+    #[allow(clippy::result_unit_err)]
     fn extract(&mut self, token: &str) -> Result<Option<Grant>, ()>;
 }
 

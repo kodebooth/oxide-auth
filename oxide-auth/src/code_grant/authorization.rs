@@ -43,6 +43,7 @@ pub trait Request {
 /// An endpoint not having any extension may use `&mut ()` as the result of system.
 pub trait Extension {
     /// Inspect the request to produce extension data.
+    #[allow(clippy::result_unit_err)]
     fn extend(&mut self, request: &dyn Request) -> std::result::Result<Extensions, ()>;
 }
 
