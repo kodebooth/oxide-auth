@@ -11,7 +11,7 @@
 #![allow(unused)]
 
 /// Simplistic reqwest client.
-#[path="./client.rs"]
+#[path = "./client.rs"]
 mod client;
 
 use oxide_auth::endpoint::Solicitation;
@@ -54,7 +54,7 @@ pub fn open_in_browser(port: u16) {
 pub fn consent_page_html(route: &str, solicitation: Solicitation) -> String {
     macro_rules! template {
         () => {
-"<html>'{0:}' (at {1:}) is requesting permission for '{2:}'
+            "<html>'{0:}' (at {1:}) is requesting permission for '{2:}'
 <form method=\"post\">
     <input type=\"submit\" value=\"Accept\" formaction=\"{4:}?{3:}&allow=true\">
     <input type=\"submit\" value=\"Deny\" formaction=\"{4:}?{3:}&deny=true\">
@@ -75,8 +75,9 @@ pub fn consent_page_html(route: &str, solicitation: Solicitation) -> String {
     if let Some(state) = state {
         extra.push(("state", state));
     }
-    
-    format!(template!(), 
+
+    format!(
+        template!(),
         grant.client_id,
         grant.redirect_uri,
         grant.scope,
