@@ -1,0 +1,15 @@
+version: 2
+updates:
+  - package-ecosystem: "cargo"
+    directories:
+      - oxide-auth
+      - oxide-auth-actix
+      - oxide-auth-async
+      - oxide-auth-axum
+      - oxide-auth-db
+      - oxide-auth-iron
+      - oxide-auth-poem
+      - oxide-auth-rocket
+      - oxide-auth-rouille
+    schedule:
+      interval: "weekly"
