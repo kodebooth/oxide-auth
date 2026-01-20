@@ -223,6 +223,7 @@ impl Authorization {
         }
     }
 
+    #[allow(clippy::result_large_err)]
     fn bound(
         &mut self, request: &dyn Request, bound_client: BoundClient<'static>,
     ) -> Result<AuthorizationState> {
@@ -279,6 +280,7 @@ impl Authorization {
         std::mem::replace(&mut self.state, AuthorizationState::Err(Error::PrimitiveError))
     }
 
+    #[allow(clippy::result_large_err)]
     fn validate(request: &dyn Request) -> Result<AuthorizationState> {
         if !request.valid() {
             return Err(Error::Ignore);
@@ -310,6 +312,7 @@ impl Authorization {
 /// If the client is not registered, the request will otherwise be ignored, if the request has
 /// some other syntactical error, the client is contacted at its redirect url with an error
 /// response.
+#[allow(clippy::result_large_err)]
 pub fn authorization_code(handler: &mut dyn Endpoint, request: &dyn Request) -> self::Result<Pending> {
     enum Requested {
         None,
@@ -446,6 +449,7 @@ impl Pending {
     }
 
     /// Denies the request, which redirects to the client for which the request originated.
+    #[allow(clippy::result_large_err)]
     pub fn deny(self) -> Result<Url> {
         let url = self.pre_grant.redirect_uri;
         let mut error = AuthorizationError::default();
@@ -458,6 +462,7 @@ impl Pending {
     ///
     /// Use negotiated parameters to authorize a client for an owner. The endpoint SHOULD be the
     /// same endpoint as was used to create the pending request.
+    #[allow(clippy::result_large_err)]
     pub fn authorize(self, handler: &mut dyn Endpoint, owner_id: Cow<str>) -> Result<Url> {
         let mut url = self.pre_grant.redirect_uri.to_url();
 

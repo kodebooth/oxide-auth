@@ -551,6 +551,7 @@ pub mod authorization {
         }
 
         /// Denies the request, which redirects to the client for which the request originated.
+        #[allow(clippy::result_large_err)]
         pub fn deny(self) -> Result<Url, Error> {
             let url = self.pre_grant.redirect_uri;
             let mut error = AuthorizationError::default();
