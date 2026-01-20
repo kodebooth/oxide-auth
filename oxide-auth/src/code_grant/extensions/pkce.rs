@@ -71,6 +71,7 @@ impl Pkce {
     /// The resulting string MUST NOT be publicly available to the client. Otherwise, it would be
     /// trivial for a third party to impersonate the client in the access token request phase. For
     /// a SHA256 methods the results would not be quite as severe but still bad practice.
+    #[allow(clippy::result_unit_err)]
     pub fn challenge(
         &self, method: Option<Cow<str>>, challenge: Option<Cow<str>>,
     ) -> Result<Option<Value>, ()> {
@@ -96,6 +97,7 @@ impl Pkce {
     ///
     /// When a challenge was agreed upon but no verifier is present, this method will return an
     /// error.
+    #[allow(clippy::result_unit_err)]
     pub fn verify(&self, method: Option<Value>, verifier: Option<Cow<str>>) -> Result<(), ()> {
         let (method, verifier) = match (method, verifier) {
             (None, _) if self.required => return Err(()),

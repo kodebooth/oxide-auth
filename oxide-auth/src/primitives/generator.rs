@@ -43,6 +43,7 @@ use rmp_serde;
 /// between these.
 pub trait TagGrant {
     /// For example sign the input parameters or generate a random token.
+    #[allow(clippy::result_unit_err)]
     fn tag(&mut self, usage: u64, grant: &Grant) -> Result<String, ()>;
 }
 
@@ -208,6 +209,7 @@ impl<'a> TaggedAssertion<'a> {
     /// function, similar to an IV to prevent accidentally producing the same token for the same
     /// grant (which may have multiple tokens). Note that the `tag` will be recovered and checked
     /// while the IV will not.
+    #[allow(clippy::result_unit_err)]
     pub fn sign(&self, counter: u64, grant: &Grant) -> Result<String, ()> {
         self.0.generate_tagged(counter, grant, self.1)
     }
@@ -216,6 +218,7 @@ impl<'a> TaggedAssertion<'a> {
     ///
     /// Result in an Err if either the signature is invalid or if the tag does not match the
     /// expected usage tag given to this assertion.
+    #[allow(clippy::result_unit_err)]
     pub fn extract(&self, token: &str) -> Result<Grant, ()> {
         self.0
             .extract(token)

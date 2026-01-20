@@ -91,6 +91,7 @@ impl Value {
     ///
     /// Returns an `Err` if this is not a public extension, `None` if the extension has no value
     /// but consists only of the key, and `Some(_)` otherwise.
+    #[allow(clippy::result_unit_err)]
     pub fn public_value(&self) -> Result<Option<&str>, ()> {
         match self {
             Value::Public(Some(content)) => Ok(Some(content)),
@@ -103,6 +104,7 @@ impl Value {
     ///
     /// Returns an `Err` if this is not a public extension, `None` if the extension has no value
     /// but consists only of the key, and `Some(_)` otherwise.
+    #[allow(clippy::result_unit_err)]
     pub fn into_public_value(self) -> Result<Option<String>, ()> {
         match self {
             Value::Public(content) => Ok(content),
@@ -114,6 +116,7 @@ impl Value {
     ///
     /// Returns an `Err` if this is not a private extension, `None` if the extension has no value
     /// but consists only of the key, and `Some(_)` otherwise.
+    #[allow(clippy::result_unit_err)]
     pub fn private_value(&self) -> Result<Option<&str>, ()> {
         match self {
             Value::Private(Some(content)) => Ok(Some(content)),
@@ -126,6 +129,7 @@ impl Value {
     ///
     /// Returns an `Err` if this is not a private extension, `None` if the extension has no value
     /// but consists only of the key, and `Some(_)` otherwise.
+    #[allow(clippy::result_unit_err)]
     pub fn into_private_value(self) -> Result<Option<String>, ()> {
         match self {
             Value::Private(content) => Ok(content),
