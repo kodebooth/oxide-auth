@@ -138,7 +138,23 @@ impl Registrar for DBRegistrar {
 mod tests {
     use super::*;
     use oxide_auth::primitives::registrar::{ExactUrl, RegisteredUrl};
+    use testcontainers_modules::{
+        redis::{REDIS_PORT, Redis},
+        testcontainers::{Container, runners::SyncRunner},
+    };
     use std::str::FromStr;
+
+    fn create_redis_instance() -> (Container<Redis>, String) {
+        let redis_instance = Redis::default().start().expect("redis instance should start");
+        let host_ip = redis_instance.get_host().expect("should get host ip");
+        let port = redis_instance
+            .get_host_port_ipv4(REDIS_PORT)
+            .expect("should get host port");
+
+        let url = format!("redis://{host_ip}:{port}");
+
+        (redis_instance, url)
+    }
 
     #[test]
     fn public_client() {
@@ -177,9 +193,7 @@ mod tests {
 
     #[test]
     fn with_additional_redirect_uris() {
-        if crate::requires_redis_and_should_skip() {
-            return;
-        }
+        let (_redis_instance, url) = create_redis_instance();
 
         let client_id = "ClientId";
         let redirect_uri =
@@ -190,12 +204,8 @@ mod tests {
         let default_scope = "default-scope".parse().unwrap();
         let client = Client::public(client_id, redirect_uri, default_scope)
             .with_additional_redirect_uris(additional_redirect_uris);
-        let mut db_registrar = DBRegistrar::new(
-            "redis://localhost/3".parse().unwrap(),
-            32,
-            "client:".parse().unwrap(),
-        )
-        .unwrap();
+        let mut db_registrar =
+            DBRegistrar::new(url.parse().unwrap(), 32, "client:".parse().unwrap()).unwrap();
         db_registrar.register_client(client).unwrap();
 
         assert_eq!(
@@ -234,16 +244,10 @@ mod tests {
 
     #[test]
     fn client_service() {
-        if crate::requires_redis_and_should_skip() {
-            return;
-        }
+        let (_redis_instance, url) = create_redis_instance();
 
-        let mut oauth_service = DBRegistrar::new(
-            "redis://localhost/3".parse().unwrap(),
-            32,
-            "client:".parse().unwrap(),
-        )
-        .unwrap();
+        let mut oauth_service =
+            DBRegistrar::new(url.parse().unwrap(), 32, "client:".parse().unwrap()).unwrap();
         let public_id = "PrivateClientId";
         let client_url = "https://example.com";
 
