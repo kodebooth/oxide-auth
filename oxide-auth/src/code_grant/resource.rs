@@ -121,6 +121,7 @@ enum ResourceState {
 }
 
 /// An input injected by the executor into the state machine.
+#[allow(clippy::large_enum_variant)]
 #[derive(Clone)]
 pub enum Input<'req> {
     /// Provide the queried (bearer) token.
