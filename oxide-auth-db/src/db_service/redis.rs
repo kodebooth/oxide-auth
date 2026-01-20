@@ -129,7 +129,7 @@ impl RedisDataSource {
     pub fn regist(&self, detail: &StringfiedEncodedClient) -> anyhow::Result<()> {
         let mut pool = self.pool.get()?;
         let client_str = serde_json::to_string(&detail)?;
-        pool.set(&(self.client_prefix.to_owned() + &detail.client_id), client_str)?;
+        pool.set::<_, _, ()>(&(self.client_prefix.to_owned() + &detail.client_id), client_str)?;
         Ok(())
     }
 }
