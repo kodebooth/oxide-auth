@@ -75,16 +75,16 @@ struct TokenMap {
 
     scope: Option<String>,
 
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     access_token: Option<String>,
 
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     refresh_token: Option<String>,
 
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     expires_in: Option<i64>,
 
-    #[serde(skip_serializing_if="Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     error: Option<String>,
 }
 
@@ -106,20 +106,17 @@ impl Client {
         params.insert("grant_type", "authorization_code");
         params.insert("code", code);
         params.insert("redirect_uri", &self.config.redirect_uri);
-        let access_token_request =  match &self.config.client_secret{
+        let access_token_request = match &self.config.client_secret {
             Some(client_secret) => client
                 .post(&self.config.token_url)
                 .form(&params)
                 .basic_auth(&self.config.client_id, client_secret.get_unique())
-                .build().unwrap(),
-            None =>{
+                .build()
+                .unwrap(),
+            None => {
                 params.insert("client_id", &self.config.client_id);
-                client
-                .post(&self.config.token_url)
-                .form(&params)
-                .build().unwrap()
+                client.post(&self.config.token_url).form(&params).build().unwrap()
             }
-
         };
 
         let token_response = client
@@ -176,7 +173,6 @@ impl Client {
             None => return Err(Error::NoToken),
         };
 
-
         let mut params = HashMap::new();
         params.insert("grant_type", "refresh_token");
         params.insert("refresh_token", &refresh);
@@ -186,15 +182,16 @@ impl Client {
                 .post(&self.config.refresh_url)
                 .form(&params)
                 .basic_auth(&self.config.client_id, client_secret.get_unique())
-                .build().unwrap(),
+                .build()
+                .unwrap(),
             None => {
                 params.insert("client_id", &self.config.client_id);
                 client
                     .post(&self.config.refresh_url)
                     .form(&params)
-                    .build().unwrap()
+                    .build()
+                    .unwrap()
             }
-
         };
         let token_response = client
             .execute(access_token_request)
@@ -205,15 +202,10 @@ impl Client {
             return Err(Error::MissingToken);
         }
 
-        let token = token_map
-            .access_token
-            .unwrap();
+        let token = token_map.access_token.unwrap();
         state.token = Some(token);
-        state.refresh = token_map
-            .refresh_token
-            .or(state.refresh.take());
-        state.until = token_map
-            .expires_in;
+        state.refresh = token_map.refresh_token.or(state.refresh.take());
+        state.until = token_map.expires_in;
         Ok(())
     }
 
