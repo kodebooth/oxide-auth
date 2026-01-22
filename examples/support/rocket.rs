@@ -28,37 +28,40 @@ impl Fairing for ClientFairing {
             token_url: "http://localhost:8000/token".into(),
             refresh_url: "http://localhost:8000/refresh".into(),
             redirect_uri: "http://localhost:8000/clientside/endpoint".into(),
-            client_secret: None
+            client_secret: None,
         };
-        Ok(rocket
-            .manage(Client::new(config))
-            .mount("/clientside", routes![oauth_endpoint, client_view, client_debug, refresh]))
+        Ok(rocket.manage(Client::new(config)).mount(
+            "/clientside",
+            routes![oauth_endpoint, client_view, client_debug, refresh],
+        ))
     }
 }
 
 #[get("/endpoint?<code>&<error>")]
-fn oauth_endpoint<'r>(code: Option<String>, error: Option<String>, state: State<Client>)
-    -> Result<Redirect, Custom<String>> 
-{
+fn oauth_endpoint<'r>(
+    code: Option<String>, error: Option<String>, state: State<Client>,
+) -> Result<Redirect, Custom<String>> {
     if let Some(error) = error {
-        return Err(Custom(Status::InternalServerError, 
-            format!("Error during owner authorization: {:?}", error)))
+        return Err(Custom(
+            Status::InternalServerError,
+            format!("Error during owner authorization: {:?}", error),
+        ));
     }
 
-    let code = code
-        .ok_or_else(|| Custom(Status::BadRequest, 
-            "Endpoint hit without an authorization code".into()))?;
-    state.authorize(&code)
-        .map_err(internal_error)?;
+    let code = code.ok_or_else(|| {
+        Custom(
+            Status::BadRequest,
+            "Endpoint hit without an authorization code".into(),
+        )
+    })?;
+    state.authorize(&code).map_err(internal_error)?;
 
     Ok(Redirect::found("/clientside"))
 }
 
 #[get("/")]
 fn client_view(state: State<Client>) -> Result<Html<String>, Custom<String>> {
-    let protected_page = state
-        .retrieve_protected_page()
-        .map_err(internal_error)?;
+    let protected_page = state.retrieve_protected_page().map_err(internal_error)?;
 
     let display_page = format!(
         "<html><style>
@@ -79,7 +82,8 @@ fn client_view(state: State<Client>) -> Result<Html<String>, Custom<String>> {
 
 #[post("/refresh")]
 fn refresh(state: State<Client>) -> Result<Redirect, Custom<String>> {
-    state.refresh()
+    state
+        .refresh()
         .map_err(internal_error)
         .map(|()| Redirect::found("/clientside"))
 }
