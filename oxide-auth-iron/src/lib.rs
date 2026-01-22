@@ -65,7 +65,7 @@ impl<'a, 'b, 'c: 'b> OAuthRequest<'a, 'b, 'c> {
     }
 
     /// Fetch authorization header
-    pub fn authorization_header(&self) -> Option<Cow<str>> {
+    pub fn authorization_header(&self) -> Option<Cow<'_, str>> {
         // Get the raw header.
         self.0
             .headers
@@ -109,18 +109,24 @@ impl OAuthResponse {
     }
 }
 
+impl Default for OAuthResponse {
+    fn default() -> Self {
+        OAuthResponse::new()
+    }
+}
+
 /// Requests are handed as mutable reference to the underlying object.
 impl<'a, 'b, 'c: 'b> WebRequest for OAuthRequest<'a, 'b, 'c> {
     type Response = OAuthResponse;
     type Error = Error;
 
-    fn query(&mut self) -> Result<Cow<dyn QueryParameter + 'static>, Self::Error> {
+    fn query(&mut self) -> Result<Cow<'_, dyn QueryParameter + 'static>, Self::Error> {
         serde_urlencoded::from_str(self.query_string())
             .map_err(|_| Error::BadRequest)
             .map(Cow::Owned)
     }
 
-    fn urlbody(&mut self) -> Result<Cow<dyn QueryParameter + 'static>, Self::Error> {
+    fn urlbody(&mut self) -> Result<Cow<'_, dyn QueryParameter + 'static>, Self::Error> {
         let formatted = self.is_form_url_encoded();
         if !formatted {
             return Err(Error::BadRequest);
@@ -131,7 +137,7 @@ impl<'a, 'b, 'c: 'b> WebRequest for OAuthRequest<'a, 'b, 'c> {
             .map(Cow::Owned)
     }
 
-    fn authheader(&mut self) -> Result<Option<Cow<str>>, Self::Error> {
+    fn authheader(&mut self) -> Result<Option<Cow<'_, str>>, Self::Error> {
         Ok(self.authorization_header())
     }
 }
@@ -181,9 +187,9 @@ impl<'a, 'b, 'c: 'b> From<&'a mut Request<'b, 'c>> for OAuthRequest<'a, 'b, 'c> 
     }
 }
 
-impl<'a, 'b, 'c: 'b> Into<&'a mut Request<'b, 'c>> for OAuthRequest<'a, 'b, 'c> {
-    fn into(self) -> &'a mut Request<'b, 'c> {
-        self.0
+impl<'a, 'b, 'c: 'b> From<OAuthRequest<'a, 'b, 'c>> for &'a mut Request<'b, 'c> {
+    fn from(val: OAuthRequest<'a, 'b, 'c>) -> &'a mut Request<'b, 'c> {
+        val.0
     }
 }
 
@@ -193,9 +199,9 @@ impl From<Response> for OAuthResponse {
     }
 }
 
-impl Into<Response> for OAuthResponse {
-    fn into(self) -> Response {
-        self.0
+impl From<OAuthResponse> for Response {
+    fn from(val: OAuthResponse) -> Response {
+        val.0
     }
 }
 
@@ -222,8 +228,8 @@ impl From<IronError> for OAuthError {
     }
 }
 
-impl Into<IronError> for OAuthError {
-    fn into(self) -> IronError {
-        self.0
+impl From<OAuthError> for IronError {
+    fn from(val: OAuthError) -> Self {
+        val.0
     }
 }
