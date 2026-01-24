@@ -15,7 +15,7 @@ license = "MIT OR Apache-2.0"
 autoexamples = false
 
 [dependencies]
-base64 = "0.21"
+base64 = "0.22"
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
 hmac = "0.12.0"
 once_cell = "1.3.1"
