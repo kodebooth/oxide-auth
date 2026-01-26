@@ -25,15 +25,17 @@ here</a> to begin the authorization process.
 </html>
 ";
 
+type ExampleEndpoint = Generic<
+    DBRegistrar,
+    AuthMap<RandomGenerator>,
+    TokenMap<RandomGenerator>,
+    Vacant,
+    Vec<Scope>,
+    fn() -> OAuthResponse,
+>;
+
 struct State {
-    endpoint: Generic<
-        DBRegistrar,
-        AuthMap<RandomGenerator>,
-        TokenMap<RandomGenerator>,
-        Vacant,
-        Vec<Scope>,
-        fn() -> OAuthResponse,
-    >,
+    endpoint: ExampleEndpoint,
 }
 
 enum Extras {
@@ -206,7 +208,7 @@ where
                         OAuthResponse::ok()
                             .content_type("text/html")
                             .unwrap()
-                            .body(&crate::support::consent_page_html("/authorize".into(), pre_grant)),
+                            .body(&crate::support::consent_page_html("/authorize", pre_grant)),
                     )
                 });
 
