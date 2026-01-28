@@ -62,7 +62,7 @@ where
     /// No error happened during processing and the resource owner can decide over the grant.
     Pending {
         /// A utility struct with which the request can be decided.
-        pending: AuthorizationPending<'a, E, R>,
+        pending: Box<AuthorizationPending<'a, E, R>>,
     },
 
     /// The request was faulty, e.g. wrong client data, but there is a well defined response.
@@ -138,11 +138,11 @@ where
                 Err(error) => AuthorizationPartialInner::Error { request, error },
             },
             Ok(negotiated) => AuthorizationPartialInner::Pending {
-                pending: AuthorizationPending {
+                pending: Box::new(AuthorizationPending {
                     endpoint: &mut self.endpoint,
                     pending: negotiated,
                     request,
-                },
+                }),
             },
         };
 
@@ -182,7 +182,7 @@ fn authorization_error<E: Endpoint<R>, R: WebRequest>(
                 .into(),
             )?;
             response
-                .redirect(target.into())
+                .redirect((*target).into())
                 .map_err(|err| endpoint.web_error(err))?;
             Ok(response)
         }

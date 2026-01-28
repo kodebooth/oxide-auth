@@ -112,6 +112,7 @@ pub mod resource {
                         .issuer()
                         .recover_token(&token)
                         .await
+                        .map(|grant| grant.map(Box::new))
                         .map_err(|_| Error::PrimitiveError)?;
                     Input::Recovered(grant)
                 }
@@ -556,7 +557,7 @@ pub mod authorization {
             let mut error = AuthorizationError::default();
             error.set_type(AuthorizationErrorType::AccessDenied);
             let error = ErrorUrl::new(url.into(), self.state.as_deref(), error);
-            Err(Error::Redirect(error))
+            Err(error.into())
         }
 
         /// Inform the backend about consent from a resource owner.
@@ -656,7 +657,7 @@ pub mod authorization {
                                 the_redirect_uri.unwrap().into_url(),
                                 AuthorizationErrorType::InvalidRequest,
                             );
-                            return Err(Error::Redirect(prepared_error));
+                            return Err(prepared_error.into());
                         }
                     };
                     Input::Extended(grant_extension)
@@ -679,7 +680,7 @@ pub mod authorization {
                                     redirect_uri,
                                     AuthorizationErrorType::InvalidScope,
                                 );
-                                Error::Redirect(prepared_error)
+                                prepared_error.into()
                             }
                         },
                     )?;

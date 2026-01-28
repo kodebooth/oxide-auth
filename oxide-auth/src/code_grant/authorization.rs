@@ -235,7 +235,7 @@ impl Authorization {
                     (*bound_client.redirect_uri).to_url(),
                     AuthorizationErrorType::UnsupportedResponseType,
                 );
-                return Err(Error::Redirect(prepared_error));
+                return Err(prepared_error.into());
             }
         }
 
@@ -251,7 +251,7 @@ impl Authorization {
                     (*bound_client.redirect_uri).to_url(),
                     AuthorizationErrorType::InvalidScope,
                 );
-                return Err(Error::Redirect(prepared_error));
+                return Err(prepared_error.into());
             }
             Some(Ok(scope)) => Some(scope),
         };
@@ -359,7 +359,7 @@ pub fn authorization_code(handler: &mut dyn Endpoint, request: &dyn Request) -> 
                             the_redirect_uri.unwrap().into(),
                             AuthorizationErrorType::InvalidRequest,
                         );
-                        return Err(Error::Redirect(prepared_error));
+                        return Err(prepared_error.into());
                     }
                 };
                 Input::Extended(grant_extension)
@@ -384,7 +384,7 @@ pub fn authorization_code(handler: &mut dyn Endpoint, request: &dyn Request) -> 
                                 redirect_uri,
                                 AuthorizationErrorType::InvalidScope,
                             );
-                            Error::Redirect(prepared_error)
+                            prepared_error.into()
                         }
                     })?;
                 Input::Negotiated {
@@ -450,7 +450,7 @@ impl Pending {
         let mut error = AuthorizationError::default();
         error.set_type(AuthorizationErrorType::AccessDenied);
         let error = ErrorUrl::new_generic(url.into_url(), self.state, error);
-        Err(Error::Redirect(error))
+        Err(error.into())
     }
 
     /// Inform the backend about consent from a resource owner.
@@ -496,7 +496,7 @@ pub enum Error {
     Ignore,
 
     /// Redirect to the given url
-    Redirect(ErrorUrl),
+    Redirect(Box<ErrorUrl>),
 
     /// Something happened in one of the primitives.
     ///
@@ -571,5 +571,11 @@ impl From<ErrorUrl> for Url {
         let mut url = val.base_uri;
         url.query_pairs_mut().extend_pairs(val.error);
         url
+    }
+}
+
+impl From<ErrorUrl> for Error {
+    fn from(value: ErrorUrl) -> Self {
+        Error::Redirect(Box::new(value))
     }
 }
